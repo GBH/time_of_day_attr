@@ -6,13 +6,7 @@ module TimeOfDayAttr
       def time_of_day_attr(*attrs)
         options = attrs.extract_options!
 
-        writers = AttrWriterModule.new(attrs, options)
-
-        if options[:prepend]
-          prepend writers
-        else
-          include writers
-        end
+        include AttrWriterModule.new(attrs, options)
       end
     end
   end
@@ -22,13 +16,14 @@ module TimeOfDayAttr
     def self.new(attrs, options)
       Module.new do
         attrs.each do |attr|
-          define_method("#{attr}=") do |value|
-            if value.is_a?(String)
-              delocalized_value = TimeOfDayAttr.delocalize(value, options)
-              super(delocalized_value)
-            else
-              super(value)
-            end
+          define_method("localized_#{attr}=") do |value|
+            seconds = TimeOfDayAttr.delocalize(value, options)
+            public_send("#{attr}=", seconds)
+          end
+
+          define_method("decimal_#{attr}=") do |value|
+            seconds = TimeofDayAttr.decimal_to_seconds(value)
+            public_send("#{attr}=", seconds)
           end
         end
       end

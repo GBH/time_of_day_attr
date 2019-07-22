@@ -6,6 +6,7 @@ module TimeOfDayAttr
   autoload :Seconds, 'time_of_day_attr/seconds'
   autoload :TimeFormat, 'time_of_day_attr/time_format'
   autoload :TimeOfDay, 'time_of_day_attr/time_of_day'
+  autoload :DecimalTime, 'time_of_day_attr/decimal_time'
 
   require 'i18n'
   I18n.load_path << File.expand_path('../config/locales/time_of_day.en.yml', __dir__)
@@ -19,6 +20,10 @@ module TimeOfDayAttr
     Seconds.convert_to_time_of_day(seconds, options)
   end
   singleton_class.send(:alias_method, :l, :localize)
+
+  def self.decimal(seconds, options = {})
+    DecimalTime.seconds_to_decimal(seconds, options).try(:to_s, 'F')
+  end
 end
 
 require 'time_of_day_attr/railtie' if defined?(Rails)

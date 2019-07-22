@@ -75,37 +75,6 @@ TimeOfDayAttr.l(business_hour.opening, format: :custom)
  => '09-00'
 ```
 
-### Prepending
-
-If you want to process the converted value in your model, you can use the prepend option:
-
-```ruby
-class BusinessHour < ActiveRecord::Base
-  attr_reader :tracked_opening, :tracked_closing
-
-  time_of_day_attr :opening
-  time_of_day_attr :closing, prepend: true
-
-  def opening=(value)
-    @tracked_opening = value
-    super(value)
-  end
-
-  def closing=(value)
-    @tracked_closing = value
-    super(value)
-  end
-end
-```
-
-```ruby
-business_hour = BusinessHour.new(opening: '9', closing: '9')
-business_hour.tracked_opening
-=> '9'
-business_hour.tracked_closing
-=> 32400
-```
-
 ### time of day field
 
 To get a text field with the converted value:
