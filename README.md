@@ -20,7 +20,7 @@ end
 
 Converts time of day to seconds since midnight when a string was set:
 ```ruby
-business_hour = BusinessHour.new(opening: '9:00', closing: '17:00')
+business_hour = BusinessHour.new(localized_opening: '9:00', localized_closing: '17:00')
 business_hour.opening
  => 32400
 business_hour.closing
@@ -73,6 +73,32 @@ business_hour.opening
  => 32400
 TimeOfDayAttr.l(business_hour.opening, format: :custom)
  => '09-00'
+```
+
+### Decimal Time
+
+Time can also be expressed in a decimal format:
+
+```ruby
+business_hour = BusinessHour.new(decimal_opening: '9.1', decimal_closing: '17.5')
+business_hour.opening
+ => 32760
+business_hour.closing
+ => 63000
+```
+
+To convert back to time of day:
+```ruby
+TimeOfDayAttr.decimal(business_hour.opening)
+ => '9.1'
+TimeOfDayAttr.decimal(business_hour.closing)
+ => '17.5'
+```
+
+You can round decimals. For example here's 20 minutes:
+```ruby
+TimeOfDayAttr.decimal(1200, round: 3)
+ => '0.333'
 ```
 
 ### time of day field
