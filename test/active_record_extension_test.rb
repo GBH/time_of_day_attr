@@ -5,46 +5,36 @@ require_relative 'schema'
 require_relative 'models/business_hour'
 
 class ActiveRecordExtensionTest < ActiveSupport::TestCase
-  context 'time of day value' do
-    setup do
-      @business_hour = BusinessHour.new(localized_opening: '9:00', localized_closing: '17:00')
-    end
-
-    should 'be converted to seconds since midnight' do
-      assert_equal 32_400, @business_hour.opening
-      assert_equal 61_200, @business_hour.closing
-    end
-  end
-
-  context 'hour formatted time of day value' do
-    setup do
-      @business_hour = BusinessHour.new(localized_opening: '9', localized_closing: '17')
-    end
-
-    should 'be converted to seconds since midnight' do
-      assert_equal 32_400, @business_hour.opening
-      assert_equal 61_200, @business_hour.closing
+  context 'default writers' do
+    should 'assign values' do
+      @business_hour = BusinessHour.new(
+        opening: 34_200,
+        closing: 63_000
+      )
+      assert_equal 34_200, @business_hour.opening
+      assert_equal 63_000, @business_hour.closing
     end
   end
 
-  context 'unsupported time of day value' do
-    setup do
-      @business_hour = BusinessHour.new(opening: 55_800)
-      @business_hour.localized_opening = 'Nine'
-    end
-
-    should 'be converted to nil' do
-      assert_nil @business_hour.opening
+  context 'localized writers' do
+    should 'assign localized values' do
+      @business_hour = BusinessHour.new(
+        localized_opening: '9:30',
+        localized_closing: '17:30'
+      )
+      assert_equal 34_200, @business_hour.opening
+      assert_equal 63_000, @business_hour.closing
     end
   end
 
-  context 'non string value' do
-    setup do
-      @business_hour = BusinessHour.new(opening: 55_800)
-    end
-
-    should 'not be converted' do
-      assert_equal 55_800, @business_hour.opening
+  context 'decimal writers' do
+    should 'assign decimal values' do
+      @business_hour = BusinessHour.new(
+        decimal_opening: '9.5',
+        decimal_closing: '17.5'
+      )
+      assert_equal 34_200, @business_hour.opening
+      assert_equal 63_000, @business_hour.closing
     end
   end
 end
