@@ -22,8 +22,10 @@ class ActiveRecordExtensionTest < ActiveSupport::TestCase
         localized_opening: '9:30',
         localized_closing: '17:30'
       )
-      assert_equal 34_200, @business_hour.opening
-      assert_equal 63_000, @business_hour.closing
+      assert_equal 34_200,  @business_hour.opening
+      assert_equal 63_000,  @business_hour.closing
+      assert_equal ' 9:30', @business_hour.localized_opening
+      assert_equal '17:30', @business_hour.localized_closing
     end
   end
 
@@ -33,8 +35,10 @@ class ActiveRecordExtensionTest < ActiveSupport::TestCase
         decimal_opening: '9.5',
         decimal_closing: '17.5'
       )
-      assert_equal 34_200, @business_hour.opening
-      assert_equal 63_000, @business_hour.closing
+      assert_equal 34_200,  @business_hour.opening
+      assert_equal 63_000,  @business_hour.closing
+      assert_equal 9.5,     @business_hour.decimal_opening
+      assert_equal 17.5,    @business_hour.decimal_closing
     end
   end
 end
