@@ -11,6 +11,23 @@ module TimeOfDayAttr
   require 'i18n'
   I18n.load_path << File.expand_path('../config/locales/time_of_day.en.yml', __dir__)
   I18n.load_path << File.expand_path('../config/locales/time_of_day.de.yml', __dir__)
+
+  def self.delocalize(time_of_day, options = {})
+    TimeOfDay.convert_to_seconds(time_of_day, options)
+  end
+
+  def self.localize(seconds, options = {})
+    Seconds.convert_to_time_of_day(seconds, options)
+  end
+  singleton_class.send(:alias_method, :l, :localize)
+
+  def self.to_decimal(seconds, options = {})
+    DecimalTime.seconds_to_decimal(seconds, options)
+  end
+
+  def self.from_decimal(decimal)
+    DecimalTime.decimal_to_seconds(decimal)
+  end
 end
 
 require 'time_of_day_attr/railtie' if defined?(Rails)
